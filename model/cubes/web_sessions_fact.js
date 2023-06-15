@@ -1,191 +1,216 @@
 cube(`web_sessions_fact`, {
   sql_table: `analytics.web_sessions_fact`,
-  
+ 
   joins: {
-    
+    web_sessions_fact: {
+      relationship: `many_to_one`,
+      sql: `${web_sessions_fact.sessionId} = ${web_events_fact.session_id}`,
+    },
   },
-  
-  dimensions: {
-    web_sessions_pk: {
-      sql: `web_sessions_pk`,
-      type: `string`,
-      primary_key: true
-    },
-    
-    is_conversion_session: {
-      sql: `is_conversion_session`,
-      type: `string`
-    },
-    
-    is_goal_achieved_session: {
-      sql: `is_goal_achieved_session`,
-      type: `string`
-    },
-    
-    is_converting_blended_user_id: {
-      sql: `is_converting_blended_user_id`,
-      type: `string`
-    },
-    
-    blended_user_id: {
-      sql: `blended_user_id`,
-      type: `string`
-    },
-    
-    events: {
+
+  measures: {
+    countOfEvents: {
       sql: `events`,
-      type: `string`
+      type: `sum`,
     },
-    
-    utm_source: {
-      sql: `utm_source`,
-      type: `string`
+    totalDurationInS: {
+      sql: `timestamp_diff(session_end_ts, session_start_ts, MINUTE)`,
+      type: `avg`,
     },
-    
-    utm_content: {
-      sql: `utm_content`,
-      type: `string`
+    totalWebSessionsPk: {
+      sql: `web_sessions_pk`,
+      type: `countDistinct`,
     },
-    
-    utm_medium: {
-      sql: `utm_medium`,
-      type: `string`
+    bouncedSessionRate: {
+      sql: `SAFE_DIVIDE(COUNT(DISTINCT(case when is_bounced_session = TRUE then web_sessions_pk end)), ${CUBE}.totalWebSessionsPk)`,
+      type: `number`,
     },
-    
-    utm_campaign: {
-      sql: `utm_campaign`,
-      type: `string`
+    count: {
+      type: `count`,
     },
-    
-    utm_term: {
-      sql: `utm_term`,
-      type: `string`
+  },
+
+  dimensions: {
+    blendedUserId: {
+      sql: `blended_user_id`,
+      type: `string`,
     },
-    
-    search: {
-      sql: `search`,
-      type: `string`
-    },
-    
-    gclid: {
-      sql: `gclid`,
-      type: `string`
-    },
-    
-    first_page_url: {
-      sql: `first_page_url`,
-      type: `string`
-    },
-    
-    first_page_url_host: {
-      sql: `first_page_url_host`,
-      type: `string`
-    },
-    
-    first_page_url_path: {
-      sql: `first_page_url_path`,
-      type: `string`
-    },
-    
-    referrer_host: {
-      sql: `referrer_host`,
-      type: `string`
-    },
-    
-    device: {
-      sql: `device`,
-      type: `string`
-    },
-    
-    device_category: {
-      sql: `device_category`,
-      type: `string`
-    },
-    
-    last_page_url: {
-      sql: `last_page_url`,
-      type: `string`
-    },
-    
-    last_page_url_host: {
-      sql: `last_page_url_host`,
-      type: `string`
-    },
-    
-    last_page_url_path: {
-      sql: `last_page_url_path`,
-      type: `string`
-    },
-    
-    duration_in_s: {
-      sql: `duration_in_s`,
-      type: `string`
-    },
-    
-    duration_in_s_tier: {
-      sql: `duration_in_s_tier`,
-      type: `string`
-    },
-    
-    referrer_medium: {
-      sql: `referrer_medium`,
-      type: `string`
-    },
-    
-    referrer_source: {
-      sql: `referrer_source`,
-      type: `string`
-    },
-    
-    referrer: {
-      sql: `referrer`,
-      type: `string`
-    },
-    
     channel: {
       sql: `channel`,
-      type: `string`
+      type: `string`,
     },
-    
-    mins_between_sessions: {
-      sql: `mins_between_sessions`,
-      type: `string`
+    adCampaignPk: {
+      sql: `ad_campaign_pk`,
+      type: `string`,
     },
-    
-    is_bounced_session: {
+    customerPk: {
+      sql: `customer_pk`,
+      type: `string`,
+    },
+    device: {
+      sql: `device`,
+      type: `string`,
+    },
+    deviceCategory: {
+      sql: `device_category`,
+      type: `string`,
+    },
+    durationInS: {
+      sql: `duration_in_s`,
+      type: `number`,
+    },
+    durationInSTier: {
+      sql: `duration_in_s_tier`,
+      type: `string`,
+    },
+    referrer: {
+      sql: `split(referrer, "?")[SAFE_OFFSET(0)]`,
+      type: `string`,
+    },
+    referrerSource: {
+      sql: `case when referrer like '%blog.rittmananalytics.com%' or referrer like '%medium.com/mark-rittman%' then 'Medium'
+                when referrer_host like '%github%' then 'Github'
+                when referrer_host like '%linkedin%' then 'LinkedIn'
+                when referrer_host like '%google%' or referrer_host like '%bing%' or  referrer_host like '%yahoo%' or referrer_host like '%yandex%' then 'Organic Search'
+                when referrer_host like '%t.co%' or referrer_host like '%twitter%' then 'Twitter'
+                when first_page_url like '%rittmananalytics.com/blog%'  then 'Squarespace'
+                when first_page_url like '%https://rittmananalytics.com/drilltodetail%'  then 'Podcast'
+                else 'Direct'
+          end`,
+      type: `string`,
+    },
+    referrerArticleStub: {
+      sql: `case when referrer_source = 'Medium' and referrer_host = 'blog.rittmananalytics.com' then split(referrer,'/')[safe_offset(3)]
+                when referrer_source = 'Medium' and referrer_host = 'medium.com' then split(referrer,'/')[safe_offset(4)]
+                when first_page_url LIKE '%rittmananalytics.com/blog/2%' then SPLIT(first_page_url_path,'/')[safe_OFFSET(5)]
+            end`,
+      type: `string`,
+    },
+    referrerDaysSincePost: {
+      sql: `case when referrer_article_stub is not null then timestamp_diff(session_start_ts_raw,marketing_content_dim.interaction_posted_ts_raw,DAY) end`,
+      type: `number`,
+    },
+    events: {
+      sql: `events`,
+      type: `number`,
+    },
+    firstPageUrl: {
+      sql: `first_page_url`,
+      type: `string`,
+    },
+    firstPageUrlHost: {
+      sql: `first_page_url_host`,
+      type: `string`,
+    },
+    firstPageUrlPath: {
+      sql: `first_page_url_path`,
+      type: `string`,
+    },
+    gclid: {
+      sql: `gclid`,
+      type: `string`,
+    },
+    isBouncedSession: {
       sql: `is_bounced_session`,
-      type: `string`
+      type: `boolean`,
     },
-    
-    ad_campaign_fk: {
-      sql: `ad_campaign_fk`,
-      type: `string`
+    lastPageUrl: {
+      sql: `last_page_url`,
+      type: `string`,
     },
-    
-    user_session_number: {
-      sql: `user_session_number`,
-      type: `string`
+    lastPageUrlHost: {
+      sql: `last_page_url_host`,
+      type: `string`,
     },
-    
-    session_start_ts: {
-      sql: `session_start_ts`,
-      type: `time`
+    lastPageUrlPath: {
+      sql: `last_page_url_path`,
+      type: `string`,
     },
-    
-    session_end_ts: {
+    minsBetweenSessions: {
+      sql: `mins_between_sessions`,
+      type: `number`,
+    },
+    prevSessionChannel: {
+      sql: `prev_session_channel`,
+      type: `string`,
+    },
+    prevUtmMedium: {
+      sql: `prev_utm_medium`,
+      type: `string`,
+    },
+    prevUtmSource: {
+      sql: `prev_utm_source`,
+      type: `string`,
+    },
+    referrerHost: {
+      sql: `referrer_host`,
+      type: `string`,
+    },
+    referrerMedium: {
+      sql: `referrer_medium`,
+      type: `string`,
+    },
+    search: {
+      sql: `search`,
+      type: `string`,
+    },
+    sessionEndTs: {
       sql: `session_end_ts`,
-      type: `time`
-    }
+      type: `time`,
+    },
+    sessionId: {
+      sql: `session_id`,
+      type: `string`,
+      primaryKey: true,
+    },
+    sessionStartTs: {
+      sql: `session_start_ts`,
+      type: `time`,
+    },
+    sessionSite: {
+      sql: `site`,
+      type: `string`,
+    },
+    userSessionNumber: {
+      sql: `user_session_number`,
+      type: `number`,
+    },
+    newOrReturningUser: {
+      sql: `case when user_session_number = 1 then 'New' else 'Returning' end`,
+      type: `string`,
+    },
+    webSessionsPk: {
+      sql: `web_sessions_pk`,
+      type: `string`,
+      
+    },
+    isConvertedUser: {
+      sql: `is_converting_blended_user_id`,
+      type: `boolean`,
+    },
+    isConvertingSession: {
+      sql: `is_converting_session`,
+      type: `boolean`,
+    },
+    sessionUtmCampaign: {
+      sql: `utm_campaign`,
+      type: `string`,
+    },
+    sessionUtmContent: {
+      sql: `utm_content`,
+      type: `string`,
+    },
+    sessionUtmMedium: {
+      sql: `utm_medium`,
+      type: `string`,
+    },
+    sessionUtmSource: {
+      sql: `utm_source`,
+      type: `string`,
+    },
+    sessionUtmTerm: {
+      sql: `utm_term`,
+      type: `string`,
+    },
   },
-  
-  measures: {
-    count: {
-      type: `count`
-    }
-  },
-  
-  pre_aggregations: {
-    // Pre-aggregation definitions go here.
-    // Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
-  }
 });
