@@ -6,7 +6,7 @@
               date_diff(date(event_ts),date(min(event_ts) over (partition by replace(page_title,'—','-') order by event_ts)), day) as days_since_page_title_published_at_ts,
               count(distinct web_event_pk) over (partition by replace(page_title,'—','-')) as total_page_views,
               count(distinct blended_user_id) over (partition by replace(page_title,'—','-')) as total_unique_viewers
-       FROM web_events_fact`,
+       FROM analytics.web_events_fact`,
 
   joins: {},
 
@@ -18,28 +18,28 @@
       sql: `web_event_pk`,
       type: `countDistinct`,
       filters: [{
-        sql: `${CUBE}.is_conversion_event = 'Yes'`
+        sql: `${CUBE}.is_conversion_event`
       }]
     },
     totalGoalAchieveds: {
       sql: `web_event_pk`,
       type: `countDistinct`,
       filters: [{
-        sql: `${CUBE}.is_goal_achieved_event = 'Yes'`
+        sql: `${CUBE}.is_goal_achieved_event`
       }]
     },
     totalSessionConversions: {
       sql: `session_id`,
       type: `countDistinct`,
       filters: [{
-        sql: `${CUBE}.is_conversion_event = 'Yes'`
+        sql: `${CUBE}.is_conversion_event`
       }]
     },
     totalSessionGoalAchieveds: {
       sql: `session_id`,
       type: `countDistinct`,
       filters: [{
-        sql: `${CUBE}.is_goal_achieved_event = 'Yes'`
+        sql: `${CUBE}.is_goal_achieved_event`
       }]
     },
     totalSessions: {

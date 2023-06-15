@@ -1,10 +1,10 @@
 cube(`web_sessions_fact`, {
-  sql_table: `analytics.web_sessions_fact`,
+  sql_table: `ra-development.analytics.web_sessions_fact`,
  
   joins: {
-    web_sessions_fact: {
+    web_events_fact: {
       relationship: `many_to_one`,
-      sql: `${web_sessions_fact.sessionId} = ${web_events_fact.session_id}`,
+      sql: `${web_sessions_fact.sessionId} = ${web_events_fact.sessionId}`,
     },
   },
 
