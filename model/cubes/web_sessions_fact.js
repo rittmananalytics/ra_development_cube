@@ -9,6 +9,14 @@ cube(`web_sessions_fact`, {
     },
   },
 
+  pre_aggregations: {
+    sessions_rollup: {
+      measures: [web_events_fact.totalPageViews,web_events_fact.totalVisitorValue,web_events_fact.totalSessionConversions,web_events_fact.totalSessions,web_events_fact.totalBlendedUserId],
+      dimensions: [CUBE.channel, CUBE.referrer_host,CUBE.sessionUtmSource, CUBE.sessionUtmCampaign, CUBE.sessionUtmMedium],
+      time_dimension: CUBE.sessionStartTs,
+      granularity: `week`,
+    },
+  },
   measures: {
     countOfEvents: {
       sql: `events`,
