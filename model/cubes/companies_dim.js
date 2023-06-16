@@ -1,6 +1,6 @@
 cube(`companies_dim`, {
   sql: `SELECT * FROM analytics.companies_dim`,
-
+  public: false,
   joins: {
     timesheet_projects_dim: {
       relationship: `one_to_many`,
