@@ -1,5 +1,6 @@
 view(`Sessions`, {
   description: `Web sessions and individual page and other events within those sessions`,
+  public: true,
 
   includes: [
     // Measure
@@ -32,6 +33,7 @@ view(`Sessions`, {
     web_events_fact.pageTitle,
     web_events_fact.pageCategory,
     web_events_fact.pageUrlPath,
+    web_events_fact.pagePublished,
     web_events_fact.pageTotalPageViews,
     web_events_fact.pageTotalUniqueViewers,
     web_events_fact.site

@@ -1,5 +1,6 @@
 cube(`contacts_dim`, {
   sql: `analytics.contacts_dim`,
+  public: false,
 
   measures: {
     countContacts: {

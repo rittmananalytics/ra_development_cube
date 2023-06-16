@@ -1,5 +1,6 @@
 cube(`web_sessions_fact`, {
   sql_table: `ra-development.analytics.web_sessions_fact`,
+  public: false,
  
   joins: {
     web_events_fact: {
