@@ -1,0 +1,28 @@
+view(`Projects`, {
+  description: `Timesheet projects, timesheets, client and staff details`,
+
+  includes: [
+    // Measure
+    timesheets_fact.totalTimesheetHoursBilled,
+    timesheets_fact.timesheetTotalAmountBilled,
+    timesheet_projects_dim.countTimesheetProjects,
+    timesheet_projects_dim.totalProjectFeeAmount,
+    timesheets_fact.totalTimesheetCostAmountGbp,
+    companies_dim.count,
+    contacts_dim.countContacts,
+    // Dimensions
+    timesheet_projects_dim.projectName,
+    timesheet_projects_dim.projectCode,
+    timesheet_projects_dim.isProjectActive,
+    timesheet_projects_dim.projectDeliveryStartTs,
+    timesheet_projects_dim.projectDeliveryEndTs,
+    timesheets_fact.timesheetBillingDate,
+    timesheets_fact.timesheetIsBillable,
+    companies_dim.companyName,
+    companies_dim.companyCreated,
+    contacts_dim.contactName,
+    contacts_dim.contactIsStaff,
+    contacts_dim.contactIsContractor,
+    contacts_dim.contactStaffJobTitle    
+      ]
+});
