@@ -8,6 +8,7 @@ view(`Projects`, {
     timesheet_projects_dim.countTimesheetProjects,
     timesheet_projects_dim.totalProjectFeeAmount,
     timesheets_fact.totalTimesheetCostAmountGbp,
+    timesheets_fact.totalTimesheetAmountBilled,
     companies_dim.count,
     contacts_dim.countContacts,
     // Dimensions
