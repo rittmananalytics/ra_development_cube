@@ -1,17 +1,14 @@
 cube(`timesheet_projects_dim`, {
-  sql: `analytics.timesheet_projects_dim`,
+  sql_table: `analytics.timesheet_projects_dim`,
   public: false,
-
+  
   joins: {
     timesheets_fact: {
-      relationship: `one_to_many`,
-      sql: `${timesheet_projects_dim.timesheetProjectPk} = ${timesheets_fact.timesheetProjectPk}`,
-    },
-    contacts_dim: {
       relationship: `many_to_one`,
-      sql: `${timesheets_fact.contactPk} = ${contacts_dim.contactPk}`,
+      sql: `${CUBE}.timesheet_project_pk = ${timesheets_fact.timesheetProjectPk}`,
     },
   },
+  
 
   measures: {
     projectHoursBudget: {

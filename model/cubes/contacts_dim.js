@@ -1,6 +1,13 @@
 cube(`contacts_dim`, {
-  sql: `analytics.contacts_dim`,
+  sql_table: `analytics.contacts_dim`,
   public: false,
+  
+  joins: {
+    timesheets_fact: {
+        relationship: `one_to_many`,
+        sql: `${CUBE}.contact_pk = ${timesheets_fact.contactPk}`,
+      },
+  },
 
   measures: {
     countContacts: {

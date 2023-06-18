@@ -1,4 +1,4 @@
-view(`Sessions`, {
+view(`web_analytics`, {
   description: `Web sessions and individual page and other events within those sessions`,
   public: true,
 

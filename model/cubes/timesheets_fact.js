@@ -1,5 +1,22 @@
 cube(`timesheets_fact`, {
-  sql: `analytics.timesheets_fact`,
+  sql_table: `analytics.timesheets_fact`,
+  public: false,
+
+  joins: {
+    timesheet_projects_dim: {
+      relationship: `many_to_one`,
+      sql: `${CUBE}.timesheet_project_fk = ${timesheet_projects_dim.timesheetProjectPk}`,
+    },
+    companies_dim: {
+      relationship: `many_to_one`,
+      sql: `${CUBE}.company_fk = ${companies_dim.companyPk}`,
+    },
+    contacts_dim: {
+      relationship: `many_to_one`,
+      sql: `${CUBE}.contact_fk = ${contacts_dim.contactPk}`,
+    }
+  },
+    
 
   measures: {
     avgTimesheetBillableHourlyCostAmountGbp: {

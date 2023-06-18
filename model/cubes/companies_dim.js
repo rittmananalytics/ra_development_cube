@@ -1,13 +1,14 @@
 cube(`companies_dim`, {
-  sql: `SELECT * FROM analytics.companies_dim`,
+  sql_table: `analytics.companies_dim`,
   public: false,
+  
   joins: {
-    timesheet_projects_dim: {
-      relationship: `one_to_many`,
-      sql: `${companies_dim.companyPk} = ${timesheet_projects_dim.companyPk}`,
+    timesheets_fact: {
+      relationship: "one_to_many",
+      sql: `${CUBE}.company_pk = ${timesheets_fact.companyPk}`
     },
   },
-
+  
   measures: {
     count: {
       type: `count`,

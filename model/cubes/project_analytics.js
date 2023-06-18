@@ -1,5 +1,7 @@
 view(`Projects`, {
   description: `Timesheet projects, timesheets, client and staff details`,
+  public: true,
+
 
   includes: [
     // Measure
