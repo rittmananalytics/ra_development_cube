@@ -1,4 +1,4 @@
-view(`Projects`, {
+view(`projects`, {
   description: `Timesheet projects, timesheets, client and staff details`,
   public: true,
 

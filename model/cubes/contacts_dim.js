@@ -7,6 +7,14 @@ cube(`contacts_dim`, {
         relationship: `one_to_many`,
         sql: `${CUBE}.contact_pk = ${timesheets_fact.contactPk}`,
       },
+    utilisation_fact: {
+        relationship: `one_to_many`,
+        sql: `${CUBE}.contact_pk = ${utilisation_fact.contactPk}`,
+      },
+    deals_fact: {
+        relationship: `one_to_many`,
+        sql: `${CUBE}.contact_pk = ${deals_fact.contactpk}`,
+      },
   },
 
   measures: {
@@ -21,10 +29,6 @@ cube(`contacts_dim`, {
   },
 
   dimensions: {
-    companyPk: {
-      sql: `company_pk`,
-      type: `string`,
-    },
     hubspotContactId: {
       sql: `(SELECT contact_id FROM UNNEST(all_contact_ids) contact_id WHERE contact_id like "%hubspot%" limit 1)`,
       type: `string`,
