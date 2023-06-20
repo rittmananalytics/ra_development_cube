@@ -18,10 +18,10 @@ cube(`contacts_dim`, {
   },
   segments: {
     staff_member: {
-      sql: `${CUBE}.contact_is_staff is true`,
+      sql: `${CUBE}.contact_is_staff`,
     },
     contractor: {
-      sql: `${CUBE}.contact_is_contractor is true`,
+      sql: `${CUBE}.contact_is_contractor`,
     },
   },
   measures: {

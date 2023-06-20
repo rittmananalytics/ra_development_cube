@@ -8,6 +8,11 @@
               count(distinct blended_user_id) over (partition by replace(page_title,'—','-')) as total_unique_viewers
        FROM analytics.web_events_fact`,
   public: false,
+  segments: {
+    page_views: {
+      sql: `${CUBE}.event_type = 'Page View'`,
+    }
+  },
 
   joins: {},
 
