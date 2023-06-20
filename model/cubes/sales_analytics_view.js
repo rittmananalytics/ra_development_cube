@@ -1,6 +1,7 @@
 view(`sales`, {
   description: `Sales deals, opportunities, wins and losses and pipeline`,
   public: true,
+  
 
   includes: [
     // Measure
@@ -18,7 +19,7 @@ view(`sales`, {
     deals_fact.dealCreatedTs,
     deals_fact.dealSource,
     deals_fact.dealType,
-    deals_fact.dealPipelineStageId,
+    deals_fact.dealPipelineStageLabel,
     deals_fact.dealPipelineStageTs,
     companies_dim.companyName,
     companies_dim.companyCreated

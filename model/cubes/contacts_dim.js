@@ -16,7 +16,14 @@ cube(`contacts_dim`, {
         sql: `${CUBE}.contact_pk = ${deals_fact.contactpk}`,
       },
   },
-
+  segments: {
+    staff_member: {
+      sql: `${CUBE}.contact_is_staff is true`,
+    },
+    contractor: {
+      sql: `${CUBE}.contact_is_contractor is true`,
+    },
+  },
   measures: {
     countContacts: {
       sql: `contact_pk`,

@@ -11,6 +11,14 @@ cube(`deals_fact`, {
       sql: `${CUBE}.company_fk = ${companies_dim.companyPk}`
     }
   },
+  segments: {
+    new_business: {
+      sql: `${CUBE}.dealType = 'New Business'`,
+    },
+    existing_client: {
+      sql: `${CUBE}.dealType = 'Existing Client'`,
+    },
+  },
   measures: {
     totalDealAmount: {
       sql: `deal_amount`,
@@ -99,8 +107,8 @@ cube(`deals_fact`, {
       sql: `deal_pipeline_id`,
       type: `string`
     },
-    dealPipelineStageId: {
-      sql: `deal_pipeline_stage_id`,
+    dealPipelineStageLabel: {
+      sql: `pipeline_stage_label`,
       type: `string`
     },
     dealPipelineStageTs: {
