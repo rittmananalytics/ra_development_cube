@@ -197,12 +197,5 @@ cube(`deals_fact`, {
       type: `time`
     }
   },
-  pre_aggregations: {
-    main: {
-      measures: [deals_fact.totalDealAmount, deals_fact.countClosedWonDeals, deals_fact.totalDealAmountGbpConverted, deals_fact.totalWeightedDealAmount],
-      dimensions: [sales.dealSource],
-      timeDimension: sales.dealCreatedTs,
-      granularity: `month`
-    }
-  }
+  
 });
