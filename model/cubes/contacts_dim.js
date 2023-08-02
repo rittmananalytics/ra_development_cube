@@ -7,10 +7,7 @@ cube(`contacts_dim`, {
         relationship: `one_to_many`,
         sql: `${CUBE}.contact_pk = ${timesheets_fact.contactPk}`,
       },
-    utilisation_fact: {
-        relationship: `one_to_many`,
-        sql: `${CUBE}.contact_pk = ${utilisation_fact.contactPk}`,
-      },
+    utilisat
     deals_fact: {
         relationship: `one_to_many`,
         sql: `${CUBE}.contact_pk = ${deals_fact.contactpk}`,
